@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#f5e6d0"/>
+  <!-- Bowl -->
+  <rect x="6" y="26" width="52" height="30" rx="4" fill="#e0c8a8"/>
+  <rect x="10" y="30" width="44" height="22" rx="3" fill="#e8d4b8"/>
+  <!-- Dark brown sauce -->
+  <rect x="12" y="34" width="40" height="16" rx="2" fill="#6a3a2a"/>
+  <!-- Pork belly cubes -->
+  <rect x="16" y="32" width="10" height="10" rx="1" fill="#8a4a3a"/>
+  <rect x="16" y="32" width="10" height="3" fill="#a06040"/>
+  <rect x="30" y="34" width="10" height="10" rx="1" fill="#7a3a2a"/>
+  <rect x="30" y="34" width="10" height="3" fill="#906040"/>
+  <rect x="22" y="36" width="10" height="10" rx="1" fill="#8a4a3a"/>
+  <rect x="22" y="36" width="10" height="3" fill="#a06040"/>
+  <rect x="38" y="36" width="8" height="8" rx="1" fill="#7a3a2a"/>
+  <rect x="38" y="36" width="8" height="3" fill="#906040"/>
+  <!-- Sauce highlights -->
+  <rect x="14" y="42" width="36" height="2" fill="#5a2a1a"/>
+  <!-- Garnish -->
+  <rect x="42" y="32" width="4" height="4" fill="#4a8a3a"/>
+</svg>

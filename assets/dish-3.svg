@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#f5e6d0"/>
+  <!-- Bowl -->
+  <rect x="8" y="26" width="48" height="30" rx="4" fill="#e8d5b7"/>
+  <rect x="12" y="30" width="40" height="22" rx="3" fill="#faf0dc"/>
+  <!-- Shredded potato strips (pale yellow) -->
+  <rect x="14" y="32" width="4" height="16" fill="#f5e6a0"/>
+  <rect x="20" y="33" width="4" height="14" fill="#f0e098"/>
+  <rect x="26" y="31" width="4" height="18" fill="#f5e6a0"/>
+  <rect x="32" y="34" width="4" height="14" fill="#f0e098"/>
+  <rect x="38" y="32" width="4" height="16" fill="#f5e6a0"/>
+  <rect x="44" y="33" width="4" height="14" fill="#f0e098"/>
+  <!-- Red chili pepper specks -->
+  <rect x="16" y="36" width="2" height="2" fill="#c93020"/>
+  <rect x="28" y="38" width="2" height="2" fill="#c93020"/>
+  <rect x="40" y="36" width="2" height="2" fill="#c93020"/>
+  <rect x="22" y="40" width="2" height="2" fill="#c93020"/>
+  <rect x="34" y="42" width="2" height="2" fill="#c93020"/>
+  <!-- Green garnish specks -->
+  <rect x="18" y="42" width="2" height="2" fill="#4a8a3a"/>
+  <rect x="42" y="40" width="2" height="2" fill="#4a8a3a"/>
+</svg>

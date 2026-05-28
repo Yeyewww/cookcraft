@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#f5e6d0"/>
+  <!-- Plate -->
+  <rect x="6" y="32" width="52" height="26" rx="4" fill="#e8d5b7"/>
+  <rect x="10" y="36" width="44" height="18" rx="3" fill="#f0e0c8"/>
+  <!-- Broccoli stalks -->
+  <rect x="16" y="36" width="5" height="12" fill="#6a9a4a"/>
+  <rect x="28" y="36" width="5" height="12" fill="#6a9a4a"/>
+  <rect x="40" y="36" width="5" height="12" fill="#6a9a4a"/>
+  <!-- Broccoli florets (tree tops) -->
+  <rect x="14" y="26" width="9" height="12" rx="3" fill="#4a8a3a"/>
+  <rect x="14" y="26" width="9" height="6" rx="3" fill="#5a9a4a"/>
+  <rect x="26" y="28" width="9" height="10" rx="3" fill="#3a7a2a"/>
+  <rect x="26" y="28" width="9" height="5" rx="3" fill="#4a8a3a"/>
+  <rect x="38" y="26" width="9" height="12" rx="3" fill="#4a8a3a"/>
+  <rect x="38" y="26" width="9" height="6" rx="3" fill="#5a9a4a"/>
+  <!-- Garlic specks -->
+  <rect x="20" y="40" width="3" height="3" fill="#f0e8c0"/>
+  <rect x="32" y="40" width="3" height="3" fill="#f0e8c0"/>
+  <rect x="44" y="38" width="3" height="3" fill="#f0e8c0"/>
+  <rect x="14" y="44" width="3" height="3" fill="#f0e8c0"/>
+  <rect x="36" y="44" width="3" height="3" fill="#f0e8c0"/>
+</svg>

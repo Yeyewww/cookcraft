@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#f5e6d0"/>
+  <!-- Bowl -->
+  <rect x="8" y="26" width="48" height="30" rx="4" fill="#e8d5b7"/>
+  <rect x="12" y="30" width="40" height="22" rx="3" fill="#faf0dc"/>
+  <!-- Rice grains background -->
+  <rect x="14" y="32" width="36" height="18" fill="#f5f0e0"/>
+  <!-- Yellow egg fried rice specks -->
+  <rect x="16" y="34" width="4" height="4" fill="#f0c838"/>
+  <rect x="24" y="32" width="4" height="4" fill="#e8b828"/>
+  <rect x="32" y="36" width="4" height="4" fill="#f0c838"/>
+  <rect x="40" y="33" width="4" height="4" fill="#e8b828"/>
+  <rect x="20" y="40" width="4" height="4" fill="#f0c838"/>
+  <rect x="28" y="42" width="4" height="4" fill="#e8b828"/>
+  <rect x="36" y="40" width="4" height="4" fill="#f0c838"/>
+  <rect x="44" y="38" width="4" height="4" fill="#e8b828"/>
+  <!-- Carrot specks -->
+  <rect x="18" y="36" width="3" height="3" fill="#e89040"/>
+  <rect x="38" y="44" width="3" height="3" fill="#e89040"/>
+  <!-- Green pea specks -->
+  <rect x="30" y="34" width="3" height="3" fill="#5a9a4a"/>
+  <rect x="44" y="42" width="3" height="3" fill="#5a9a4a"/>
+  <rect x="16" y="44" width="3" height="3" fill="#5a9a4a"/>
+</svg>

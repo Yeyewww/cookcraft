@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#f5e6d0"/>
+  <!-- Dessert glass/cup -->
+  <rect x="16" y="16" width="32" height="38" rx="4" fill="#e8dcc8"/>
+  <rect x="18" y="18" width="28" height="34" rx="3" fill="#f5f0e8"/>
+  <!-- Top pinkish layer (coconut) -->
+  <rect x="18" y="18" width="28" height="10" rx="2" fill="#f0c8b8"/>
+  <rect x="18" y="18" width="28" height="4" fill="#f8d8c8"/>
+  <!-- Middle orange layer (mango) -->
+  <rect x="18" y="28" width="28" height="12" fill="#e8a040"/>
+  <rect x="18" y="28" width="28" height="4" fill="#f0b050"/>
+  <!-- Bottom light yellow layer -->
+  <rect x="18" y="40" width="28" height="12" fill="#f0d080"/>
+  <rect x="18" y="40" width="28" height="4" fill="#f8e098"/>
+  <!-- Topping / garnish -->
+  <rect x="24" y="14" width="4" height="6" fill="#f0c8b8"/>
+  <rect x="34" y="14" width="4" height="6" fill="#f0c8b8"/>
+  <!-- Mint leaf on top -->
+  <rect x="30" y="12" width="4" height="4" fill="#5a9a4a"/>
+  <rect x="32" y="10" width="2" height="4" fill="#4a8a3a"/>
+</svg>
