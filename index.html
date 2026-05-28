@@ -4,868 +4,511 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CookCraft · 像素烹饪技能</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-/* ========== 全局重置 & 像素基调 ========== */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* ===== 像素字体 ===== */
+@font-face {
+  font-family: 'Pixel';
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/press-start-2p@5.1.0/files/press-start-2p-latin-400-normal.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zpix';
+  src: url('https://cdn.jsdelivr.net/npm/zpix@3.1.0/dist/Zpix.woff2') format('woff2');
+  font-display: swap;
+}
 
 :root {
-  --bg-page: #f5efe0;
-  --bg-card: #faf6ed;
-  --bg-card-hover: #f0e9d8;
-  --wood-light: #e8d5b7;
-  --wood-dark: #c4a97d;
-  --wood-border: #8b7355;
-  --accent-green: #6b8f3a;
-  --accent-amber: #d4a843;
-  --accent-red: #c45a4a;
-  --text-dark: #4a3729;
-  --text-muted: #8b7a66;
-  --star-gold: #f0b429;
-  --star-empty: #d4c9b0;
-  --pixel-size: 4px;
+  --green: #6a994e;
+  --amber: #d4a843;
+  --red: #c45a4a;
+  --bg: #f0e8d8;
+  --card-bg: #fcf8f0;
+  --border: #3a3a3a;
+  --text: #2d2d2d;
+  --text-dim: #8a8a8a;
+  --star: #f0b429;
+  --star-bg: #d5d0c4;
+  --bar-bg: #d5d0c4;
 }
 
-@font-face {
-  font-family: 'Minecraft';
-  src: local('Press Start 2P'), local('Courier New');
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
 body {
-  font-family: 'Press Start 2P', 'Minecraft', monospace;
-  background: var(--bg-page);
-  background-image:
-    linear-gradient(45deg, #ede4d0 25%, transparent 25%),
-    linear-gradient(-45deg, #ede4d0 25%, transparent 25%);
-  background-size: 32px 32px;
-  color: var(--text-dark);
-  min-height: 100vh;
-  padding: 20px;
+  font-family: 'Zpix', 'Pixel', 'Courier New', monospace;
+  background: #e8e0d0;
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   image-rendering: pixelated;
+  -webkit-font-smoothing: none;
 }
 
-/* ========== 像素边框 ========== */
-.pixel-border {
-  border: 4px solid var(--wood-border);
-  border-radius: 0;
-  box-shadow:
-    inset -4px -4px 0 rgba(0,0,0,0.12),
-    inset 4px 4px 0 rgba(255,255,255,0.25),
-    -2px -2px 0 var(--wood-border),
-    2px 2px 0 var(--wood-border);
-}
-.pixel-border-sm {
-  border: 3px solid var(--wood-border);
-  box-shadow:
-    inset -3px -3px 0 rgba(0,0,0,0.1),
-    inset 3px 3px 0 rgba(255,255,255,0.2);
-}
-.pixel-btn {
-  font-family: inherit;
-  font-size: 10px;
-  border: 3px solid var(--wood-border);
-  background: var(--wood-light);
-  color: var(--text-dark);
-  padding: 8px 16px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 var(--wood-dark);
-  transition: all 0.06s steps(2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  position: relative;
-}
-.pixel-btn:hover {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 var(--wood-dark);
-  background: var(--bg-card-hover);
-}
-.pixel-btn:active {
-  transform: translateY(4px);
-  box-shadow: none;
+/* ===== 16:9 面板 ===== */
+.panel {
+  width: 100vw;
+  height: 100vh;
+  max-width: 1280px;
+  max-height: 720px;
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: 50px 40px 1fr 48px;
+  border: 4px solid var(--border);
+  overflow: hidden;
 }
 
-/* ========== 顶部横幅 ========== */
-.header {
-  max-width: 1000px;
-  margin: 0 auto 20px;
+/* ===== 顶部栏 ===== */
+.top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  background: var(--bg-card);
-  position: relative;
+  padding: 0 16px;
+  background: #2d2d2d;
+  border-bottom: 4px solid var(--border);
 }
-.header::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: repeating-linear-gradient(
-    90deg, var(--accent-green) 0px, var(--accent-green) 8px,
-    var(--accent-amber) 8px, var(--accent-amber) 16px
-  );
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.logo { display: flex; align-items: center; gap: 8px; }
 .logo-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--accent-green);
-  border: 3px solid var(--wood-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
+  width: 28px; height: 28px;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #fff;
+  border: 2px solid #4d7530;
 }
 .logo h1 {
-  font-size: 14px;
+  font-size: 16px; color: #fff;
   letter-spacing: 2px;
-  color: var(--accent-green);
 }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.top-right { display: flex; align-items: center; gap: 12px; }
+.streak { font-size: 11px; color: var(--amber); }
+.avatar {
+  width: 32px; height: 32px;
+  background: #e0d5c0; border: 2px solid #fff;
+  overflow: hidden; flex-shrink: 0;
 }
-.avatar-box {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--wood-border);
-  overflow: hidden;
-  background: #f0e9d8;
-}
-.avatar-box svg { width: 100%; height: 100%; display: block; }
+.avatar svg{width:100%;height:100%;display:block}
 
-/* ========== 统计栏 ========== */
-.stats-bar {
-  max-width: 1000px;
-  margin: 0 auto 20px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr) auto;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--bg-card);
+/* ===== 状态栏 ===== */
+.status-bar {
+  display: flex;
+  align-items: stretch;
+  background: var(--card-bg);
+  border-bottom: 3px solid var(--border);
 }
-.stat-item {
-  text-align: center;
-  padding: 8px;
+.stat {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 8px;
+  border-right: 2px solid #ddd8cc;
+  font-size: 12px; white-space: nowrap;
 }
-.stat-number {
-  font-size: 18px;
-  color: var(--accent-green);
-  display: block;
-  margin-bottom: 6px;
+.stat:last-child{border:none}
+.stat .n { font-size: 18px; color: var(--green); }
+.stat .n.amber { color: var(--amber); }
+.stat .lbl { font-size: 10px; color: var(--text-dim); }
+.stat .goal-lbl { font-size: 10px; color: var(--text-dim); }
+.minibar {
+  width: 50px; height: 10px;
+  background: var(--bar-bg); border: 2px solid var(--border);
 }
-.stat-label {
-  font-size: 8px;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-.stat-divider {
-  width: 2px;
-  background: var(--wood-light);
-  margin: 4px 0;
+.minibar-fill { height: 100%; background: var(--green); }
+
+/* ===== 主区 ===== */
+.main {
+  display: flex; flex-direction: column;
+  overflow: hidden; background: var(--bg);
 }
 
-/* ========== 分类筛选 ========== */
-.filter-bar {
-  max-width: 1000px;
-  margin: 0 auto 16px;
-  display: flex;
-  gap: 6px;
-  padding: 0 4px;
-  flex-wrap: wrap;
+/* 筛选 */
+.filter-row {
+  display: flex; gap: 3px;
+  padding: 6px 14px 4px;
+  flex-shrink: 0;
 }
 .filter-btn {
   font-family: inherit;
-  font-size: 9px;
-  padding: 6px 14px;
-  border: 3px solid var(--wood-border);
-  background: var(--bg-card);
-  color: var(--text-muted);
+  font-size: 11px; padding: 3px 10px;
+  background: var(--card-bg);
+  border: 3px solid var(--border);
+  color: var(--text-dim);
   cursor: pointer;
-  transition: all 0.06s steps(2);
-  opacity: 0.7;
+  line-height: 1.5;
 }
-.filter-btn:hover { opacity: 0.9; }
+.filter-btn:hover { background: #ede6d8; }
 .filter-btn.active {
-  background: var(--accent-green);
-  border-color: var(--accent-green);
-  color: #fff;
-  opacity: 1;
+  background: var(--green); border-color: var(--green); color: #fff;
 }
-.filter-btn i { margin-right: 4px; }
 
-/* ========== 技能网格 ========== */
-.skill-grid {
-  max-width: 1000px;
-  margin: 0 auto;
+/* 网格 */
+.grid-wrap {
+  flex: 1; overflow-y: auto;
+  padding: 4px 14px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.grid-wrap::-webkit-scrollbar { width: 5px; }
+.grid-wrap::-webkit-scrollbar-track { background: #ddd8cc; }
+.grid-wrap::-webkit-scrollbar-thumb { background: var(--border); }
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 10px;
 }
 
-/* ========== 技能卡片 ========== */
-.skill-card {
-  background: var(--bg-card);
-  padding: 16px 14px 14px;
+/* ===== 卡片 ===== */
+.card {
+  background: var(--card-bg);
+  border: 3px solid var(--border);
   cursor: pointer;
-  transition: all 0.1s steps(2);
+  padding: 14px 10px 8px;
+  display: flex; flex-direction: column; align-items: center;
   position: relative;
-  overflow: hidden;
+  transition: transform 0.06s steps(2);
 }
-.skill-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--accent-green) 0px, var(--accent-green) 8px,
-    transparent 8px, transparent 16px
-  );
+.card:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: -2px -2px 0 var(--border);
 }
-.skill-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset -4px -4px 0 rgba(0,0,0,0.12),
-    inset 4px 4px 0 rgba(255,255,255,0.25),
-    -4px -4px 0 var(--wood-border),
-    4px 4px 0 var(--wood-border);
-}
-.skill-card .dish-img {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 12px;
-  display: block;
+.card .img-box {
+  width: 68px; height: 68px;
+  margin-bottom: 6px;
   image-rendering: pixelated;
 }
-.skill-card .dish-img svg { width: 100%; height: 100%; display: block; }
-.skill-card h3 {
-  font-size: 10px;
-  text-align: center;
-  margin-bottom: 8px;
-  line-height: 1.5;
-  color: var(--text-dark);
+.card .img-box img { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+.card h3 {
+  font-size: 12px; text-align: center;
+  line-height: 1.4; margin-bottom: 4px;
+  word-break: keep-all;
 }
-.skill-card .stars {
-  text-align: center;
-  margin-bottom: 8px;
-  font-size: 10px;
-  letter-spacing: 2px;
+.card .stars { font-size: 12px; letter-spacing: 2px; margin-bottom: 4px; line-height: 1; }
+.card .stars .on { color: var(--star); }
+.card .stars .off { color: var(--star-bg); }
+.card .tags { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
+.card .tag {
+  font-size: 9px; padding: 2px 6px;
+  background: #ede6d8; border: 2px solid #d5cdbc;
+  color: var(--text-dim); line-height: 1.3;
 }
-.skill-card .stars .filled { color: var(--star-gold); }
-.skill-card .stars .empty { color: var(--star-empty); }
-.skill-card .tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  justify-content: center;
+.card .tag.pro { background: #dde8c8; border-color: var(--green); color: var(--green); }
+.card .tag.newb { background: #f5e8c8; border-color: var(--amber); color: #887000; }
+.card .foot {
+  font-size: 9px; color: var(--text-dim);
+  margin-top: 8px; padding-top: 5px;
+  border-top: 2px solid #e8e0d0;
+  width: 100%; text-align: center;
 }
-.skill-card .tag {
-  font-size: 7px;
-  padding: 3px 7px;
-  background: var(--wood-light);
-  border: 2px solid var(--wood-dark);
-  color: var(--text-muted);
-  line-height: 1;
+.card.new-mark::after {
+  content: 'NEW';
+  position: absolute; top: 6px; right: 5px;
+  background: var(--red); color: #fff;
+  font-size: 8px; padding: 2px 6px;
+  border: 2px solid #903020; line-height: 1;
 }
-.skill-card .tag.proficient { background: #dce8c5; border-color: var(--accent-green); color: var(--accent-green); }
-.skill-card .tag.learning { background: #f5e6c5; border-color: var(--accent-amber); color: #b8860b; }
-.skill-card .card-footer {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 2px dashed var(--wood-light);
-  font-size: 7px;
-  color: var(--text-muted);
-  text-align: center;
+/* 空位 */
+.card.empty {
+  border-style: dashed; border-color: #ccc4b0;
+  background: transparent; cursor: default;
+  justify-content: center; min-height: 150px; opacity: 0.45;
 }
-.skill-card .empty-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 180px;
-  opacity: 0.5;
-  border: 3px dashed var(--wood-dark);
-}
-.skill-card .empty-slot .plus {
-  font-size: 32px;
-  color: var(--wood-dark);
-  margin-bottom: 8px;
-  line-height: 1;
-}
-.skill-card .empty-slot span {
-  font-size: 8px;
-  color: var(--text-muted);
-}
-.skill-card.new-dish::after {
-  content: 'NEW!';
-  position: absolute;
-  top: 8px;
-  right: -20px;
-  background: var(--accent-red);
-  color: #fff;
-  font-size: 7px;
-  padding: 2px 20px;
-  transform: rotate(45deg);
-}
+.card.empty .ep { font-size: 28px; color: #ccc4b0; line-height: 1; margin-bottom: 4px; }
+.card.empty .et { font-size: 10px; color: #bbb4a0; }
 
-/* ========== Modal ========== */
+/* ===== 底部栏 ===== */
+.bottom-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 16px;
+  background: #2d2d2d; border-top: 4px solid var(--border);
+}
+.challenge {
+  display: flex; align-items: center; gap: 8px;
+}
+.challenge .icon {
+  width: 26px; height: 26px;
+  background: #f5e6c5; border: 2px solid var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.challenge .txt { font-size: 11px; color: #fff; white-space: nowrap; }
+.challenge .hl { color: var(--amber); }
+.challenge-right {
+  display: flex; align-items: center; gap: 10px;
+}
+.challenge-right .minibar { width: 70px; }
+.challenge-right .minibar-fill.amber { background: var(--amber); }
+.challenge-right .medal { font-size: 15px; }
+.community-link {
+  font-size: 10px; color: var(--amber);
+  text-decoration: none; white-space: nowrap;
+}
+.community-link:hover { color: #f0d060; }
+
+/* ===== Modal ===== */
 .modal-overlay {
   display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
   z-index: 100;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; align-items: center;
   padding: 20px;
 }
 .modal-overlay.open { display: flex; }
 .modal-box {
-  background: var(--bg-card);
-  max-width: 520px;
-  width: 100%;
-  padding: 28px 24px 24px;
+  background: var(--card-bg);
+  border: 4px solid var(--border);
+  width: 460px; max-width: 90vw;
+  padding: 22px 20px 18px;
   position: relative;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
 }
 .modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
-  border: 3px solid var(--wood-border);
-  background: var(--bg-card);
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
+  position: absolute; top: 8px; right: 8px;
+  width: 26px; height: 26px;
+  background: var(--card-bg); border: 3px solid var(--border);
+  cursor: pointer; font-size: 12px; font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim); line-height: 1;
 }
-.modal-close:hover { background: var(--accent-red); color: #fff; border-color: var(--accent-red); }
-.modal-top {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  align-items: flex-start;
+.modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.modal-body {
+  display: flex; gap: 16px;
+  margin-bottom: 14px; align-items: flex-start;
 }
-.modal-dish-img {
-  width: 80px;
-  height: 80px;
-  flex-shrink: 0;
-  border: 3px solid var(--wood-dark);
-  background: var(--bg-page);
+.modal-img {
+  width: 72px; height: 72px; flex-shrink: 0;
+  border: 3px solid var(--border); background: var(--bg);
+  image-rendering: pixelated;
 }
-.modal-dish-img svg { width: 100%; height: 100%; display: block; }
+.modal-img img { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
 .modal-info { flex: 1; }
-.modal-info h2 {
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: var(--text-dark);
+.modal-info h2 { font-size: 13px; margin-bottom: 2px; }
+.modal-info .cat { font-size: 10px; color: var(--text-dim); margin-bottom: 5px; display: block; }
+.modal-info .stars { font-size: 13px; letter-spacing: 2px; margin-bottom: 5px; }
+.modal-info .stars .on { color: var(--star); }
+.modal-info .stars .off { color: var(--star-bg); }
+.exp-lbl { font-size: 9px; color: var(--text-dim); display: block; margin-bottom: 3px; }
+.exp-bar {
+  width: 100%; height: 12px;
+  background: var(--bar-bg); border: 3px solid var(--border);
+  position: relative; overflow: hidden;
 }
-.modal-info .category-label {
-  font-size: 8px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-  display: block;
+.exp-fill { height: 100%; background: var(--green); transition: width 0.2s; }
+.exp-txt {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; color: var(--text);
 }
-.modal-info .stars { font-size: 14px; letter-spacing: 3px; margin-bottom: 4px; }
-.modal-info .stars .filled { color: var(--star-gold); }
-.modal-info .stars .empty { color: var(--star-empty); }
-.modal-info .exp-label {
-  font-size: 8px;
-  color: var(--text-muted);
-  display: block;
-  margin-bottom: 6px;
+.notes { margin-top: 12px; }
+.notes h4 { font-size: 10px; color: var(--text-dim); margin-bottom: 5px; }
+.note-item {
+  font-size: 9px; padding: 4px 6px;
+  background: var(--bg); margin-bottom: 3px;
+  border: 2px solid #ddd8cc;
+  display: flex; gap: 4px; align-items: flex-start; line-height: 1.4;
 }
-
-/* 熟练度进度条 */
-.exp-bar-wrapper {
-  width: 100%;
-  height: 14px;
-  background: var(--wood-light);
-  border: 3px solid var(--wood-dark);
-  position: relative;
-  overflow: hidden;
+.note-badge {
+  font-size: 7px; padding: 1px 4px;
+  background: var(--amber); color: #fff;
+  flex-shrink: 0; margin-top: 1px;
+  border: 1px solid #b08830; line-height: 1.2;
 }
-.exp-bar-fill {
-  height: 100%;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--accent-green) 0px, var(--accent-green) 6px,
-    transparent 6px, transparent 10px
-  );
-  background-color: var(--accent-green);
-  transition: width 0.3s steps(8);
-}
-.exp-bar-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 7px;
-  color: var(--text-dark);
-  text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-}
-
-/* 笔记区 */
-.modal-section {
-  margin-top: 16px;
-}
-.modal-section h4 {
-  font-size: 9px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.notes-list {
-  list-style: none;
-}
-.notes-list li {
-  font-size: 8px;
-  padding: 6px 8px;
-  background: var(--bg-page);
-  margin-bottom: 4px;
-  border: 2px solid var(--wood-light);
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  line-height: 1.5;
-}
-.notes-list li .note-type {
-  font-size: 6px;
-  padding: 2px 5px;
-  background: var(--accent-amber);
-  color: #fff;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.notes-list li .note-type.tip { background: var(--accent-green); }
-.notes-list li .note-type.fail { background: var(--accent-red); }
-
-/* ========== 赛季挑战 ========== */
-.challenge-bar {
-  max-width: 1000px;
-  margin: 20px auto 0;
-  padding: 14px 20px;
-  background: var(--bg-card);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.challenge-left { display: flex; align-items: center; gap: 14px; }
-.challenge-icon {
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  background: #f5e6c5;
-  border: 3px solid var(--accent-amber);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.challenge-text h3 { font-size: 10px; color: var(--text-dark); margin-bottom: 4px; }
-.challenge-text p { font-size: 7px; color: var(--text-muted); line-height: 1.5; }
-.challenge-progress {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.challenge-progress .exp-bar-wrapper { width: 120px; }
-.challenge-progress .stat-number { font-size: 14px; }
-
-/* ========== 社区入口 ========== */
-.community-entry {
-  max-width: 1000px;
-  margin: 12px auto 0;
-  text-align: center;
-  padding: 12px;
-}
-.community-entry p {
-  font-size: 8px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-.community-entry a {
-  color: var(--accent-green);
-  text-decoration: none;
-  border-bottom: 2px dashed var(--accent-green);
-}
-.community-entry a:hover { color: var(--accent-red); border-bottom-color: var(--accent-red); }
-
-/* ========== 响应式 ========== */
-@media (max-width: 600px) {
-  body { padding: 12px; }
-  .header { flex-direction: column; gap: 12px; text-align: center; }
-  .header-right { width: 100%; justify-content: center; }
-  .stats-bar { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; }
-  .stat-number { font-size: 14px; }
-  .stat-label { font-size: 7px; }
-  .skill-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-  .modal-top { flex-direction: column; align-items: center; text-align: center; }
-  .challenge-bar { flex-direction: column; text-align: center; }
-  .challenge-left { flex-direction: column; }
-  .stat-divider:last-child { display: none; }
-}
+.note-badge.tip { background: var(--green); border-color: #4d7530; }
+.note-badge.fail { background: var(--red); border-color: #903020; }
+.note-empty { font-size: 9px; color: var(--text-dim); padding: 4px; }
 </style>
 </head>
 <body>
 
-<!-- ========== 顶部 Header ========== -->
-<header class="header pixel-border">
-  <div class="logo">
-    <div class="logo-icon pixel-border-sm">🍳</div>
-    <h1>CookCraft</h1>
-  </div>
-  <div class="header-right">
-    <span style="font-size:8px;color:var(--text-muted)">连续下厨 <b style="color:var(--accent-green)">12</b> 天</span>
-    <div class="avatar-box pixel-border-sm">
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="64" height="64" fill="#f0e9d8"/>
-        <!-- chef hat -->
-        <rect x="20" y="8" width="24" height="6" fill="#fff"/>
-        <rect x="22" y="6" width="20" height="4" fill="#fff"/>
-        <rect x="24" y="4" width="16" height="4" fill="#fff"/>
-        <rect x="26" y="2" width="12" height="4" fill="#fff"/>
-        <!-- face -->
-        <rect x="18" y="16" width="28" height="24" fill="#f5d6b8"/>
-        <rect x="28" y="18" width="2" height="2" fill="#4a3729"/>
-        <rect x="34" y="18" width="2" height="2" fill="#4a3729"/>
-        <rect x="28" y="24" width="8" height="2" fill="#c45a4a"/>
-        <rect x="20" y="14" width="2" height="6" fill="#f5d6b8"/>
-        <rect x="42" y="14" width="2" height="6" fill="#f5d6b8"/>
-        <!-- blush -->
-        <rect x="18" y="22" width="4" height="4" fill="#e8a090"/>
-        <rect x="42" y="22" width="4" height="4" fill="#e8a090"/>
-      </svg>
+<div class="panel">
+
+  <!-- ===== 顶部 ===== -->
+  <div class="top-bar">
+    <div class="logo">
+      <div class="logo-icon">🍳</div>
+      <h1>CookCraft</h1>
+    </div>
+    <div class="top-right">
+      <span class="streak">🔥 连续 12 天</span>
+      <div class="avatar">
+        <svg viewBox="0 0 64 64">
+          <rect width="64" height="64" fill="#e0d5c0"/>
+          <rect x="20" y="6" width="24" height="6" fill="#fff"/>
+          <rect x="22" y="4" width="20" height="4" fill="#fff"/>
+          <rect x="24" y="2" width="16" height="4" fill="#fff"/>
+          <rect x="26" y="0" width="12" height="4" fill="#fff"/>
+          <rect x="18" y="14" width="28" height="26" fill="#f5d6b8"/>
+          <rect x="28" y="18" width="2" height="2" fill="#3a3a3a"/>
+          <rect x="34" y="18" width="2" height="2" fill="#3a3a3a"/>
+          <rect x="28" y="26" width="8" height="2" fill="#c45a4a"/>
+          <rect x="20" y="12" width="2" height="6" fill="#f5d6b8"/>
+          <rect x="42" y="12" width="2" height="6" fill="#f5d6b8"/>
+          <rect x="18" y="24" width="4" height="4" fill="#e8a090"/>
+          <rect x="42" y="24" width="4" height="4" fill="#e8a090"/>
+        </svg>
+      </div>
     </div>
   </div>
-</header>
 
-<!-- ========== 统计栏 ========== -->
-<div class="stats-bar pixel-border">
-  <div class="stat-item">
-    <span class="stat-number">12</span>
-    <span class="stat-label">已掌握 · 菜品</span>
-  </div>
-  <div class="stat-divider"></div>
-  <div class="stat-item">
-    <span class="stat-number" style="color:var(--accent-amber)">3</span>
-    <span class="stat-label">本月挑战<br>进行中</span>
-  </div>
-  <div class="stat-divider"></div>
-  <div class="stat-item">
-    <span class="stat-number">4</span>
-    <span class="stat-label">拿手好菜<br>⭐⭐⭐⭐</span>
-  </div>
-  <div class="stat-divider"></div>
-  <div class="stat-item" style="border-left:2px solid var(--wood-light);padding-left:16px;">
-    <span style="font-size:8px;color:var(--text-muted);display:block;margin-bottom:4px;">🎯 本月目标</span>
-    <span style="font-size:9px;">学会做 3 道新菜</span>
-  </div>
-</div>
-
-<!-- ========== 分类筛选 ========== -->
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">🍽 全部</button>
-  <button class="filter-btn" data-filter="热菜">🔥 热菜</button>
-  <button class="filter-btn" data-filter="主食">🍚 主食</button>
-  <button class="filter-btn" data-filter="饮品">🥤 饮品</button>
-  <button class="filter-btn" data-filter="甜品">🍰 甜品</button>
-</div>
-
-<!-- ========== 技能网格 ========== -->
-<div class="skill-grid" id="skill-grid"></div>
-
-<!-- ========== 赛季挑战 ========== -->
-<div class="challenge-bar pixel-border">
-  <div class="challenge-left">
-    <div class="challenge-icon pixel-border-sm">🏆</div>
-    <div class="challenge-text">
-      <h3>🌱 五月烹饪挑战</h3>
-      <p>本月推荐学习：一道清爽夏日前菜 · 已完成 <b style="color:var(--accent-green)">1</b>/3</p>
+  <!-- ===== 状态栏 ===== -->
+  <div class="status-bar">
+    <div class="stat"><span class="n">12</span><span class="lbl">已掌握</span></div>
+    <div class="stat"><span class="n amber">3</span><span class="lbl">挑战进行中</span></div>
+    <div class="stat"><span class="n">4</span><span class="lbl">拿手好菜</span></div>
+    <div class="stat">
+      <span class="goal-lbl">🎯 本月目标</span>
+      <div class="minibar"><div class="minibar-fill" style="width:33%"></div></div>
+      <span class="lbl">1/3</span>
     </div>
   </div>
-  <div class="challenge-progress">
-    <div class="exp-bar-wrapper">
-      <div class="exp-bar-fill" style="width:33%"></div>
-      <span class="exp-bar-text">33%</span>
+
+  <!-- ===== 主区 ===== -->
+  <div class="main">
+    <div class="filter-row">
+      <button class="filter-btn active" data-f="all">🍽 全部</button>
+      <button class="filter-btn" data-f="热菜">🔥 热菜</button>
+      <button class="filter-btn" data-f="主食">🍚 主食</button>
+      <button class="filter-btn" data-f="饮品">🥤 饮品</button>
+      <button class="filter-btn" data-f="甜品">🍰 甜品</button>
     </div>
-    <span class="stat-number" style="font-size:12px;">🏅</span>
+    <div class="grid-wrap">
+      <div class="grid" id="grid"></div>
+    </div>
   </div>
+
+  <!-- ===== 底部 ===== -->
+  <div class="bottom-bar">
+    <div class="challenge">
+      <div class="icon">🏆</div>
+      <div class="txt">五月挑战 · 清爽夏日前菜</div>
+    </div>
+    <div class="challenge-right">
+      <div class="minibar"><div class="minibar-fill amber" style="width:33%"></div></div>
+      <span class="medal">🏅</span>
+      <a href="#" class="community-link">📱 晒出你的面板 →</a>
+    </div>
+  </div>
+
 </div>
 
-<!-- ========== 社区入口 ========== -->
-<div class="community-entry">
-  <p>💡 看看其他厨友的技能面板 → 去 <a href="#">小红书晒出你的 CookCraft</a></p>
-</div>
-
-<!-- ========== Modal ========== -->
+<!-- ===== Modal ===== -->
 <div class="modal-overlay" id="modal">
-  <div class="modal-box pixel-border">
-    <button class="modal-close pixel-border-sm" id="modal-close">✕</button>
-    <div class="modal-top">
-      <div class="modal-dish-img pixel-border-sm" id="modal-img"></div>
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-body">
+      <div class="modal-img" id="modal-img"></div>
       <div class="modal-info">
-        <h2 id="modal-title">菜名</h2>
-        <span class="category-label" id="modal-category">分类</span>
+        <h2 id="modal-title">名称</h2>
+        <span class="cat" id="modal-cat">分类</span>
         <div class="stars" id="modal-stars"></div>
-        <span class="exp-label">熟练度</span>
-        <div class="exp-bar-wrapper">
-          <div class="exp-bar-fill" id="modal-exp-bar" style="width:0%"></div>
-          <span class="exp-bar-text" id="modal-exp-text">0%</span>
+        <span class="exp-lbl">熟练度</span>
+        <div class="exp-bar">
+          <div class="exp-fill" id="modal-exp-fill" style="width:0%"></div>
+          <span class="exp-txt" id="modal-exp-txt">0%</span>
         </div>
       </div>
     </div>
-    <div class="modal-section">
-      <h4>📝 我的烹饪笔记</h4>
-      <ul class="notes-list" id="modal-notes"></ul>
+    <div class="notes">
+      <h4>📝 烹饪笔记</h4>
+      <div id="modal-notes"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ========== 数据 ==========
-const dishSvgs = {};
-const svgFiles = ['dish-1','dish-2','dish-3','dish-4','dish-5','dish-6','dish-7','dish-8','dish-9'];
-let svgLoaded = 0;
-
-async function loadSvgs() {
-  for (const name of svgFiles) {
-    try {
-      const resp = await fetch(`assets/${name}.svg`);
-      const text = await resp.text();
-      dishSvgs[name] = text;
-    } catch (e) {
-      // fallback inline SVG
-    }
-  }
-  renderGrid();
-}
+const imgs = {
+  "dish-1": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB4klEQVR4nO2ZvW7CMBRGv0fpIzAzVurSpZ37SH2hhgmmkgEkFiI1DDCgCqRURIoyuzKiiKbhn3Cc4uGMic79fG0l18o/B+aWES1AI1qARrQAjWgBGtECNKIFaEQL0IgWoBEtQCNagEa0AI1oARrRAjSiBWhEC9CIFqARLUAjWoBGtACNaAEa0QI0ogVoRAvQiBagES1AI1qARrRALQLIpn2TjNpmFrXMbPjmNlHLJHHbZNPeZQLIpn0zr0PhBayzdT87gMSuvAMFncLXqH1+ALMarv6aKLhAAMNCaw0Dk4w6ZjF+N+kkdINx1yRxZ+lW9L14AEncqbSYPLzfya5nrVvlASwKK79P+OOpWUoVAVi3ygNIjxS+ZgCW+gTQaZSy730vr4+/8AFMfAcYvwUmDpwBg4dGKX8OqsKenzw3Syk7N5w+BAdXCOCQ74irB5Cu2BbALLhbU/bcUQFshucDCH0HpC5tgfRHYKPlixyzBSxlZ4azWyD1AYQndcBe6tYBKUz1AYy7eJFbucbvcFLxQOQc7KSq8gDmdiRmQ3CpEyodiUU3PhRN4hsfi2fTXk0vRoLLXIzkq9shm6ZtKbqwvUTB0vWQ4nN/OTrwt8M6pE3+M6IFaEQL0IgWoBEtQCNagOYbS7mz7ll5iMEAAAAASUVORK5CYII=",
+  "dish-2": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACPElEQVR4nO2aP2vCQBjG388l2L2dOhf6LfwAtkPn7oXi0O/QuGgspTpocdAMsZAbpES4YiA4X7mgxb8xOa95LjHDb4lH8nufPGS4kxbfQ3HOEFoADaEF0BBaAA2hBdAQWgANoQXQEFoADaEF0BBaAA2hBdAQWgANoQXQEFoADaEF0BBaAA2hBdAQWgANoQXQEFoADaEF0BBaAA2hBdAQWgANoQXQEFoADaEF0BBawOgAwulA8Elb+E5T+OPXfOE0BXfbIpz21QIIpwMxy+PgW8gZ5CypA+DyzSs8cPRyswE6AMnPpJ0+AF/x7ZsYgO9YCgGMt6o0tgSf2GLufYiA9Xb4fLoV7w8XOwHsW5sEpft4XcFdO3Ld9j85AO7asQ+Xw+8j0wCWSFftAcwPvHnPfhat+uXBAFr1K8E6jcTyOpokXbUHEBx4mBzQqlVE5666M3znvhr9JtckldfVpMwCsGqViOHj9Qar6yuOCetuUu4CaGluUuYBWEc4JqwryDIAZkgD/K/eH2kacGqTygBYxg1oLT9ecQ1I8vHS1aTMA2Cdxt4Q1sXZW6O4AQSHBNbEk6zX1SSjAmAjOyLJel1NMiaAgKULQFeTChkAU7hPYQIIWI4DCDRRBjAyoQFeF9qCVPzHhgg/siVmEnLvUnsAM7kpKkMwuQlaN0Wd/B+KnLQtzl21gxETUToYCaf9ghyNWWpHY4vl+aBMT1YIPUhqHCtyjxt+UR6PD8v/B1BcPc4BQgugIbQAGkILoPkFizH2ae9dSW4AAAAASUVORK5CYII=",
+  "dish-3": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABzklEQVR4nO2aT2rCQBSH31F6hK57BI/WE3TZWzSuXMcquDH4p4uCQRSijISAZjNlgi0YKFqTyTdpZvHtQvjeb56avKdk64nuMkIL0AgtQCO0AI3QAjRCC9AILUAjtACN0AI0QgvQCC1AI7QAjdACNEIL0AgtQCO0AI3QAjRCC9AILUAjtACN0AI0QgvQCC1AI7QAjdACNEILtCKANB7rZDnQm6ivN9M3t4n6OlkMdBqP6gkgjcd624bCSxhn4145gMScvAMF3cNuOagewKaFp/9DFNQQwLTcWoE+xO/6uJvpXH04wWk/14fVsHAr+9YewGE1vEsyW79eYCMI42Y9gOP55P9akO3rDcbNegD5FUH1+XJB3QH8dv9vWheAqul6H4CCOiB8fCiw1QG33t8HoFryHRBa6hgfgHKsA8LSSVf9Feg9PxW0pgPCrgXQuyJoOzAfgHLsI6D8k+CLfxRWXXwXyGt6u7t3ftBYALmDA5FGAjjt59bkq3Laz9wdieUN0MhIbGuGoquhU51gdygadXwsniw6vhhJ41FLV2NBPaux7LwfNGmalqILu0oUFK63FJ/59fjE/z9AbmmT/4zQAjRCC9AILUAjtACN0AI0Xzu95xtSZystAAAAAElFTkSuQmCC",
+  "dish-4": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB4ElEQVR4nO2aQWrCQBhG/+P0CF123SPkVF33Io0rt8UquDFU7aJgKClEmRAG1M2UEQ1VkIwx5iUmi7cceP83n0mYUfTP2LQZoQVohBagEVqARmgBGqEFaIQWoBFagEZoARqhBWiEFqARWoBGaAEaoQVohBagEVqARmgBGqEFaIQWoBFagEZoARqhBWiEFqARWoBGaAEaoQUaEUAajkw875so6Jlo8lZvgp6JZ32ThsNyAkjDkfltwuAnWGfrfnUAsd35GgxUhOW8f30AUQN3PyPwSwhgclot3yThh1kvP81WfdWCzWpqksVg53bqW3oAyWKAD3wO63bzANb7ndfq24nIfzjCdd2lWCfrdvMAtvu0qwrAdf3Bq/IA1PvjEa4DeK/PGV0A6g4aEL08ZbhU+38DijSo8QFox5/QJQ9BJAB92KmKAjjXCDwAXZC7C0BdWemib5UuANWQBkQ5T/W89ee+H7oAFNQAz/GLzrUBeW8Vr+0B6Lp9B3gXBuBKYwLQNaELQFXUgM1qWtsGbFYVHIgkbT8S+7WHootB1oT7PxQNWn4sHs9afjGShsOGXo351VyN6f39oE3TVooeLJfA37m6DK+76/Fx9/8AcanJPSO0AI3QAjRCC9AILUAjtADNH7Ex2S1qQlEjAAAAAElFTkSuQmCC",
+  "dish-5": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABkUlEQVR4nO2aQWqDQBiF37k8gkfIETxCjtCj9Ag9gaFZZJFFFxHcZBihTLowJYTCFINNJRQadOJT5i2+3YDP5/+//48RR7PxMQO2ADZgC2ADtgA2YAtgA7YANmALuOXDvl2RAUYV4NUCRhngFYImgilgd/mVKEPQyoBcFWDVArkywM4lBGuz8a589VXx27uPpipW3pXry7XpBrhyPdqN39Jcm25A1T75U/0ehO4N/neuqQS6AXbHMyBETuBRBnydP/9EBtSRVMBppBZoMmjIVMDcDRg6FTB3A9x+e3l/eNhve00FzN2A7kvUPpkAGWBUAT5ECyxfFkHotsA95ybTAksZsFAFLGNugew5DULXgHvORW/AoV2EHHsRygJVQJ9KmcQqnJEMaJ76JH4MZSQDhuqHDDCqAK8WMMMzIH1KRmVyGZDKgEQVkKoFEmVAqhBMNAVSjcEknj2gKla0PWASf4+72D+QqFsTfiohuk9kjjMHbAFswBbABmwBbMAWwAZsAWzAFsAGbAFswBbABmwBbL4B97NZqiOeDqoAAAAASUVORK5CYII=",
+  "dish-6": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACu0lEQVR4nO2bz08TQRTH5+/Sg/HHid6tYmLEC17koL2iXkgaoNHeTCVyrSiUiy2aLeGkdVFjaDSFZs2Ww2wtk1jAnp95Y1dbsisLXfbR5R0+SbPT7XzfZ2dnp81UdOQXOMsI6gDUCOoA1AjqANQI6gDUCOoA1AjqAH7YTfsvLEDyCAC+BSTPAcCToOSnAPBjUPI6AHghJE/JSnDP2YDtlg2byoGaaoZK70rQqx37bLRs2HWqNAL2nA3Y2gm/8KACXDADZolcwHbLDfYDGm0Fcv8nNH+1Q6NXwEhupK9N7rd1n9g3ZsAskQvY7A57DBJm4UEEuPyRgLeDjF5ArTsEw77yRxGAfbs5yAQ0T6D4oAKQoRVgWCswaYzDraWLGnxdtt56Cvjf5wylgLlPj2F04Zwnzz9n4y3AsFZ0oTdenodUOQFTH5IwVUlCykjoY9i2+v1NfAVMGuO6SCx4+uNoH3gM2x6U78RXwNjiJV0kXnksutO2Nfgaj2Hb2OLlMyCg4iGgclW33V66MjwCvioLCvUi5GvLgbj7Oul7C9zv3gITxet9Arw+p1AvwTdl0Qso1EuBi0eemJl/k6CR0CPh4CSYNTOHCnAlkAvIHwhVUbYnve95uHbP9zH4aC2l3xNEADKUAvK1ZciuZ2CieA1uvrqgwWGPV95tj72AfEjnsQBFPALmqy9g1nwG6cpTjd+VdNv9OOp5M2YO5qsL9CNgxswNVMgg56F4cgHpQwoLynHFsQAVkxGQPiYsQPEIAL4FFM8BwJOg5KcA8GNQ8joAeCEkeSUIvBSW/F0A+MuQjGiDxGzPr0FRkzHn6DZINLpbZErWOxIJWHzJek+3RWbXqZ7oJqmgbO1Imk1Snb5tcjLywrFP7HuQ4jun+R8jUSGoA1AjqANQI6gDUCOoA1AjqANQI6gDUCOoA1DzG7diVaUturvrAAAAAElFTkSuQmCC",
+  "dish-7": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACDUlEQVR4nO2asU7CUBRA73f4CXwAiZ2cNIE/cGLuD0gcZWNQPsFNgosmgu4yGEgQWj6AqvicMczPVCXGhuKDUk8LHc5G4Nzj1dj3kOlrX28zQgvQCC1AI7QAjdACNEIL0AgtQCO0AI3QAjRCC9AILUAjtACN0AI0QgvQCC1AI7QAjdACNEIL0AgtQCO0AI3QAjRCC9AILUAjtACN0AI0QgskOsDkuauV09Rep6FHD/VU4TurwY2ePHVWCzB57mqvc4kPEj3E5ecsSwdQThOXXxf+LEsH8FK49uFb0Fg+wGjOG40fr7VyW/pteJdIlNPS497VXPfIAca9K3xAU+ZFiBxAhfzkz0t7RkQdqlC1frFwE9zb9Qd4C/mwJAbwiS3A/cWpLhd2tW3lPjENMHv9jFppz4jZ64MBgu93VNzV7fpZ/AGOij/D+1QLlhFxB/ApF634A9iBDw0b2HQzTEOEhQmSugDHVm4uWYBSyjegakjYBvxFFsBKyAZUDvLbuQGHuZ1EkQWwoF8BO4RV/0GKSmICVAz+Npzs5zc3gA2RBRj+88OQnSBifRhSzteBiP/ImcQI/vDtei2+A5Fxio7EXuI4Eht9R5htwsYfinrbfiyuBje4+LpQ7goXI5OnzoZcjTX0+ypXY9NNuBx1mwuHn2bX4/3s+wGyaD22AaEFaIQWoBFagEZoARqhBWg+AErR/QuZ87BUAAAAAElFTkSuQmCC",
+  "dish-8": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC30lEQVR4nO2az2sTQRTH39+j4EUFmwpCqbQNRpBeNF6U4iVXhYK/LsZDVFAipU3+AA896sH0lCDFKrTQS3JIIAkYJcEtDYScn7wlpTvbdtLs7OabNXv4HHbnZfJ535kNZBLq/9nnaYbQAmgILYCG0AJoCC2AhtACaAgtgIbQAmgILYCG0AJoCC2AhtACaAgtgIbQAmgILYCG0AJoCC2AhtACaAgtgIbQAmgILYCG0AJoCC2AhtACaAgtgIbQAqEN4ODXT179tMLJXJyTeQe5Jfu+jJuIBT2/cQCrIucUcyHjJmJBz28cQNK9MqfgrP9d/8aP1u9wPBPj+BsHmZh9X8ZN5h97APc2FrVyd3OLSv2Dtdtq4y4eriWM5h97AMvZOa3g8sc5pV7X/BEm8489gPjbWVvSvVJyLfdl3Fl/8/VVbfMybjJ/IAH0Wnts1Yrcrmxxu/xV4Twr6qyffXaR59OXeSlzTamR6/lXV+xxk/lPUNliq1rkXmvXWwC91h53Tmncq2Ds6YWh+BrAAOlBehk5AEtWXjNxWAIQDmrF0QNoa1ZfSGYXtHL3swtK/a30jLb5RHrGaH7941DwEEDZtZXKBbZqJT5sfOdu8wevf3muFdz4/MKuO+L95mNtAB82nyj1o85v09hhq1qyXd3+xgFY1ZLyZlZ925ZMvLuuiMm13JdxZ/3f+rYdwo2Xl5TG5Vruy7jJ/MprqyX/AzgcrLybVD5+grPE/KjvtkvHnPEacfU9gG5ADQURgAALoDtEMOj6/z6A1JAdEwXQBO+AVMCfAZOzA9rHW9fXhlyPRBRAPtoBPJmPQHPaPwOak00UQDnaAezvI9DYgW/rcxPElyHL9XV4kpFzC98D6MiBiIQwyTvB1wORiv5ILFR4ORKzqvpD0TDh6VC019rVHouHhU6l4O1YvD/4bUDSky2EbmRkKgXbXdd8P/qDxH70DxHSbY9pgNACaAgtgIbQAmj+AVBQlgVsBOpnAAAAAElFTkSuQmCC",
+  "dish-9": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABpElEQVR4nO2asW7CMBCG77k6ZWbqzNNk5glQpz5CR5buIVSCsWodJQNERgqSK4jEZuSQDKStqgri/5Bv+KZYud+//7sMMdXlyoYMoQWgIbQANIQWgIbQAtAQWgAaQgtAQ2gBaAgtAA2hBdShGzCaPDSIAWVgCRg/jRqCTcA4FANMMrugb0DHb+vEgPIOErDfLG2VL6zO5lar5IL+yfaf/3edq1HlaVOThQH7zdJu1feND2ZAi6t5CxPo2hc0J68Se3z/mf7Grl3X4WruihRvgG5jjzBAZwkDA9RZzF+Cb01XVwwomSTA9CI8NOwSYMSAmSTAhNwCX2+v3jbvarEz4LD+9GKCq3FYf/AzwLw8ekUMUJIAKy2gGM0A/Rz5hVsLaDEgkgRoaYFIZoCWIRjJV0CH+Bk8FlOviAFKEmClBRSjGWBWsVfYtYARA2JJgJEWiGUGmOCGYDbHDUEOv8erPIUZsCsW/K/I6IHYZgmPKzJ1a4K7ruIiOfjms/PJs7kkVd85hBaAhtAC0BBaABpCC0BDaAFoCC0ADaEFoCG0ADSEFoDmBPFcoN6FuhRdAAAAAElFTkSuQmCC"
+};
 
 const skills = [
-  {
-    id: 1, name: '西红柿炒蛋', category: '热菜',
-    svg: 'dish-1', stars: 4, exp: 85,
-    tags: ['拿手好菜', '家常'],
-    lastCooked: '3天前',
-    notes: [
-      { type: 'tip', text: '番茄先去皮炒出沙，口感更好' },
-      { type: 'tip', text: '鸡蛋加少许水打散，更嫩滑' },
-    ]
-  },
-  {
-    id: 2, name: '可乐鸡翅', category: '热菜',
-    svg: 'dish-2', stars: 3, exp: 60,
-    tags: ['翻过车', '宴客'],
-    lastCooked: '1周前',
-    notes: [
-      { type: 'fail', text: '第一次火太大糊了😅 改中小火收汁就好了' },
-      { type: 'tip', text: '加两片姜和八角，层次感翻倍' },
-    ]
-  },
-  {
-    id: 3, name: '酸辣土豆丝', category: '热菜',
-    svg: 'dish-3', stars: 4, exp: 75,
-    tags: ['拿手好菜', '快手'],
-    lastCooked: '5天前',
-    notes: [
-      { type: 'tip', text: '切完用冷水泡掉淀粉，才会脆' },
-      { type: 'fail', text: '醋要沿锅边淋，高温激发香味' },
-    ]
-  },
-  {
-    id: 4, name: '蛋炒饭', category: '主食',
-    svg: 'dish-4', stars: 5, exp: 95,
-    tags: ['拿手好菜', '招牌'],
-    lastCooked: '昨天',
-    notes: [
-      { type: 'tip', text: '隔夜饭是灵魂，粒粒分明' },
-      { type: 'tip', text: '蛋液拌匀米饭再炒，每粒都裹上蛋' },
-    ]
-  },
-  {
-    id: 5, name: '抹茶拿铁', category: '饮品',
-    svg: 'dish-5', stars: 3, exp: 55,
-    tags: ['学习中'],
-    lastCooked: '2周前',
-    notes: [
-      { type: 'tip', text: '抹茶粉先加少量热水用茶筅搅匀' },
-      { type: 'fail', text: '牛奶打太热了，抹茶会发苦' },
-    ]
-  },
-  {
-    id: 6, name: '青柠薄荷饮', category: '饮品',
-    svg: 'dish-6', stars: 2, exp: 40,
-    tags: ['学习中', '夏日'],
-    lastCooked: '1月前',
-    notes: [
-      { type: 'tip', text: '薄荷叶轻轻拍一下再放，香味更浓' },
-    ]
-  },
-  {
-    id: 7, name: '红烧肉', category: '热菜',
-    svg: 'dish-7', stars: 4, exp: 80,
-    tags: ['拿手好菜', '宴客', '硬菜'],
-    lastCooked: '2周前',
-    notes: [
-      { type: 'tip', text: '五花肉先煎到两面金黄，去油更香' },
-      { type: 'tip', text: '加一罐啤酒代替水，肉质更软烂' },
-      { type: 'fail', text: '糖色炒过头了会发苦，琥珀色就要下肉' },
-    ]
-  },
-  {
-    id: 8, name: '蒜蓉西兰花', category: '热菜',
-    svg: 'dish-8', stars: 3, exp: 65,
-    tags: ['家常', '健康'],
-    lastCooked: '4天前',
-    notes: [
-      { type: 'tip', text: '西兰花焯水时加盐和油，颜色翠绿' },
-    ]
-  },
-  {
-    id: 9, name: '芒果椰奶冻', category: '甜品',
-    svg: 'dish-9', stars: 2, exp: 35,
-    tags: ['学习中', '夏日'],
-    lastCooked: '3周前',
-    notes: [
-      { type: 'tip', text: '吉利丁片用冰水泡软再用，不然会结块' },
-    ]
-  },
+  {id:1,n:'西红柿炒蛋',c:'热菜',p:'dish-1',s:4,e:85,t:['拿手好菜','家常'],l:'3天前',
+   notes:[{k:'tip',v:'番茄先去皮炒出沙，口感更好'},{k:'tip',v:'鸡蛋加少许水打散，更嫩滑'}]},
+  {id:2,n:'可乐鸡翅',c:'热菜',p:'dish-2',s:3,e:60,t:['翻过车','宴客'],l:'1周前',
+   notes:[{k:'fail',v:'第一次火太大糊了，改中小火收汁'},{k:'tip',v:'加两片姜和八角，层次感翻倍'}]},
+  {id:3,n:'酸辣土豆丝',c:'热菜',p:'dish-3',s:4,e:75,t:['拿手好菜','快手'],l:'5天前',
+   notes:[{k:'tip',v:'切完用冷水泡掉淀粉，才会脆'},{k:'fail',v:'醋要沿锅边淋，高温激发香味'}]},
+  {id:4,n:'蛋炒饭',c:'主食',p:'dish-4',s:5,e:95,t:['拿手好菜','招牌'],l:'昨天',
+   notes:[{k:'tip',v:'隔夜饭是灵魂，粒粒分明'},{k:'tip',v:'蛋液拌匀米饭再炒，每粒都裹上蛋'}]},
+  {id:5,n:'抹茶拿铁',c:'饮品',p:'dish-5',s:3,e:55,t:['学习中'],l:'2周前',
+   notes:[{k:'tip',v:'抹茶粉先加少量热水用茶筅搅匀'},{k:'fail',v:'牛奶打太热了，抹茶会发苦'}]},
+  {id:6,n:'青柠薄荷饮',c:'饮品',p:'dish-6',s:2,e:40,t:['学习中','夏日'],l:'1月前',
+   notes:[{k:'tip',v:'薄荷叶轻轻拍一下再放，香味更浓'}]},
+  {id:7,n:'红烧肉',c:'热菜',p:'dish-7',s:4,e:80,t:['拿手好菜','宴客','硬菜'],l:'2周前',
+   notes:[{k:'tip',v:'五花肉先煎到两面金黄，去油更香'},{k:'tip',v:'加一罐啤酒代替水，肉质更软烂'},{k:'fail',v:'糖色炒过头了会发苦，琥珀色就要下肉'}]},
+  {id:8,n:'蒜蓉西兰花',c:'热菜',p:'dish-8',s:3,e:65,t:['家常','健康'],l:'4天前',
+   notes:[{k:'tip',v:'西兰花焯水时加盐和油，颜色翠绿'}]},
+  {id:9,n:'芒果椰奶冻',c:'甜品',p:'dish-9',s:2,e:35,t:['学习中','夏日'],l:'3周前',
+   notes:[{k:'tip',v:'吉利丁片用冰水泡软再用，不然会结块'}]},
 ];
 
-// ========== 空位占位 ==========
-const emptySlots = [
-  { category: '热菜', hint: '学一道新热菜' },
-  { category: '甜品', hint: '想学做什么甜品？' },
-  { category: '饮品', hint: '解锁一杯夏日饮品' },
+const empties = [
+  {c:'热菜',h:'学一道新热菜'},{c:'甜品',h:'想做点甜品'},{c:'饮品',h:'解锁夏日饮品'}
 ];
 
-// ========== 渲染 ==========
-let currentFilter = 'all';
+let filt = 'all';
 
-function starsHTML(level) {
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    html += `<span class="${i <= level ? 'filled' : 'empty'}">✦</span>`;
-  }
-  return html;
+function stars(lv) {
+  let r='';
+  for(let i=1;i<=5;i++) r+=`<span class="${i<=lv?'on':'off'}">✦</span>`;
+  return r;
 }
 
-function getSvgContent(dishKey) {
-  return dishSvgs[dishKey] || '';
+function render() {
+  const g = document.getElementById('grid');
+  const list = filt==='all'?skills:skills.filter(x=>x.c===filt);
+  const es = filt==='all'?empties:empties.filter(x=>x.c===filt);
+  g.innerHTML = list.map(s=>{
+    const isNew = s.e<50;
+    return `<div class="card${isNew?' new-mark':''}" onclick="openModal(${s.id})">
+      <div class="img-box"><img src="${imgs[s.p]||''}" alt="${s.n}"></div>
+      <h3>${s.n}</h3>
+      <div class="stars">${stars(s.s)}</div>
+      <div class="tags">${s.t.map(t=>{
+        let cl='tag';
+        if(t==='拿手好菜'||t==='招牌') cl+=' pro';
+        else if(t==='学习中') cl+=' newb';
+        return `<span class="${cl}">${t}</span>`;
+      }).join('')}</div>
+      <div class="foot">${s.l} · 做过</div>
+    </div>`;
+  }).join('') + es.map(e=>`<div class="card empty"><div class="ep">＋</div><div class="et">${e.h}</div></div>`).join('');
 }
 
-function renderGrid() {
-  const grid = document.getElementById('skill-grid');
-  const filtered = currentFilter === 'all'
-    ? skills
-    : skills.filter(s => s.category === currentFilter);
-  const categorySlots = currentFilter === 'all'
-    ? emptySlots
-    : emptySlots.filter(s => s.category === currentFilter);
-
-  grid.innerHTML = '';
-
-  filtered.forEach(skill => {
-    const svgContent = getSvgContent(skill.svg);
-    const isNew = skill.exp < 50;
-    grid.innerHTML += `
-      <div class="skill-card pixel-border ${isNew ? 'new-dish' : ''}" onclick="openModal(${skill.id})">
-        <div class="dish-img">${svgContent}</div>
-        <h3>${skill.name}</h3>
-        <div class="stars">${starsHTML(skill.stars)}</div>
-        <div class="tags">
-          ${skill.tags.map(t => {
-            let cls = 'tag';
-            if (t === '拿手好菜' || t === '招牌') cls += ' proficient';
-            else if (t === '学习中') cls += ' learning';
-            return `<span class="${cls}">${t}</span>`;
-          }).join('')}
-        </div>
-        <div class="card-footer">上次做 · ${skill.lastCooked}</div>
-      </div>
-    `;
-  });
-
-  // 空位占位
-  categorySlots.forEach(slot => {
-    grid.innerHTML += `
-      <div class="skill-card pixel-border">
-        <div class="empty-slot">
-          <div class="plus">＋</div>
-          <span>${slot.hint}</span>
-        </div>
-      </div>
-    `;
-  });
-}
-
-// ========== Modal ==========
 function openModal(id) {
-  const skill = skills.find(s => s.id === id);
-  if (!skill) return;
-  const svgContent = getSvgContent(skill.svg);
-
-  document.getElementById('modal-img').innerHTML = svgContent;
-  document.getElementById('modal-title').textContent = skill.name;
-  document.getElementById('modal-category').textContent = `🍽 ${skill.category}`;
-  document.getElementById('modal-stars').innerHTML = starsHTML(skill.stars);
-  document.getElementById('modal-exp-bar').style.width = skill.exp + '%';
-  document.getElementById('modal-exp-text').textContent = skill.exp + '%';
-
-  const notesEl = document.getElementById('modal-notes');
-  if (skill.notes && skill.notes.length > 0) {
-    notesEl.innerHTML = skill.notes.map(n =>
-      `<li><span class="note-type ${n.type}">${n.type === 'tip' ? '💡 诀窍' : '💢 翻车'}</span>${n.text}</li>`
-    ).join('');
+  const s = skills.find(x=>x.id===id);
+  if(!s) return;
+  document.getElementById('modal-img').innerHTML = `<img src="${imgs[s.p]||''}" alt="${s.n}">`;
+  document.getElementById('modal-title').textContent = s.n;
+  document.getElementById('modal-cat').textContent = '🍽 '+s.c;
+  document.getElementById('modal-stars').innerHTML = stars(s.s);
+  document.getElementById('modal-exp-fill').style.width = s.e+'%';
+  document.getElementById('modal-exp-txt').textContent = s.e+'%';
+  const ne = document.getElementById('modal-notes');
+  if(s.notes&&s.notes.length){
+    ne.innerHTML = s.notes.map(n=>`<div class="note-item"><span class="note-badge ${n.k}">${n.k==='tip'?'💡诀窍':'💢翻车'}</span>${n.v}</div>`).join('');
   } else {
-    notesEl.innerHTML = '<li style="font-size:8px;color:var(--text-muted);padding:8px;">还没有记录笔记呢 📝</li>';
+    ne.innerHTML = '<div class="note-empty">还没有记录笔记 📝</div>';
   }
-
   document.getElementById('modal').classList.add('open');
 }
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-
-// ========== 事件绑定 ==========
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderGrid();
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal-close').addEventListener('click',closeModal);
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); filt=b.dataset.f; render();
   });
 });
-
-// ========== 启动 ==========
-loadSvgs();
-// 如果 SVG 加载失败，fallback 渲染
-setTimeout(() => { if (svgLoaded < svgFiles.length) renderGrid(); }, 500);
+render();
 </script>
 </body>
 </html>
